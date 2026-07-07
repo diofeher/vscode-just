@@ -4,11 +4,11 @@ install:
 
 # Compile TypeScript
 compile:
-    npx tsc -p ./
+    npm run build
 
 # Package extension into .vsix
 package: compile
-    npx @vscode/vsce package --no-dependencies
+    npx @vscode/vsce package
 
 # Install extension locally in VS Code
 install-extension: package
