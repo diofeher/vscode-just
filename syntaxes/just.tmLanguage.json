@@ -1,0 +1,162 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Just",
+  "scopeName": "source.just",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#strings" },
+    { "include": "#interpolation" },
+    { "include": "#keywords" },
+    { "include": "#attributes" },
+    { "include": "#settings" },
+    { "include": "#assignments" },
+    { "include": "#recipes" },
+    { "include": "#operators" },
+    { "include": "#builtins" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.number-sign.just",
+          "match": "#.*$"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.triple.just",
+          "begin": "\"\"\"",
+          "end": "\"\"\""
+        },
+        {
+          "name": "string.quoted.triple.single.just",
+          "begin": "'''",
+          "end": "'''"
+        },
+        {
+          "name": "string.quoted.double.just",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.just",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.just",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "name": "constant.character.escape.just",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.backtick.just",
+          "begin": "```",
+          "end": "```"
+        },
+        {
+          "name": "string.quoted.backtick.just",
+          "begin": "`",
+          "end": "`"
+        }
+      ]
+    },
+    "interpolation": {
+      "patterns": [
+        {
+          "name": "meta.interpolation.just",
+          "begin": "\\{\\{",
+          "end": "\\}\\}",
+          "beginCaptures": {
+            "0": { "name": "punctuation.section.interpolation.begin.just" }
+          },
+          "endCaptures": {
+            "0": { "name": "punctuation.section.interpolation.end.just" }
+          },
+          "patterns": [
+            { "include": "#strings" },
+            { "include": "#builtins" }
+          ]
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.just",
+          "match": "\\b(if|else|true|false)\\b"
+        },
+        {
+          "name": "keyword.other.just",
+          "match": "^\\s*(alias|export|import|mod)\\b"
+        }
+      ]
+    },
+    "attributes": {
+      "patterns": [
+        {
+          "name": "meta.attribute.just",
+          "match": "^\\s*\\[([^\\]]+)\\]",
+          "captures": {
+            "1": { "name": "entity.other.attribute-name.just" }
+          }
+        }
+      ]
+    },
+    "settings": {
+      "patterns": [
+        {
+          "name": "keyword.other.setting.just",
+          "match": "^\\s*set\\b"
+        }
+      ]
+    },
+    "assignments": {
+      "patterns": [
+        {
+          "match": "^\\s*(\\w+)\\s*(:=)",
+          "captures": {
+            "1": { "name": "variable.other.just" },
+            "2": { "name": "keyword.operator.assignment.just" }
+          }
+        }
+      ]
+    },
+    "recipes": {
+      "patterns": [
+        {
+          "match": "^(@?)([a-zA-Z_][a-zA-Z0-9_-]*)([^:]*):(?!=)",
+          "captures": {
+            "1": { "name": "keyword.operator.quiet.just" },
+            "2": { "name": "entity.name.function.just" },
+            "3": { "name": "variable.parameter.just" }
+          }
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.just",
+          "match": "(:=|\\+|/)"
+        }
+      ]
+    },
+    "builtins": {
+      "patterns": [
+        {
+          "name": "support.function.builtin.just",
+          "match": "\\b(arch|os|os_family|num_cpus|invocation_directory|invocation_directory_native|justfile|justfile_directory|just_executable|just_pid|uuid|sha256|sha256_file|env_var|env_var_or_default|env|join|clean|path_exists|error|absolute_path|extension|file_name|file_stem|parent_directory|without_extension|capitalize|kebabcase|lowercamelcase|lowercase|replace|replace_regex|shoutykebabcase|shoutysnakecase|snakecase|titlecase|trim|trim_end|trim_end_match|trim_end_matches|trim_start|trim_start_match|trim_start_matches|uppercamelcase|uppercase|quote|shell|choose|semver_matches|cache_directory|config_directory|config_local_directory|data_directory|data_local_directory|executable_directory|home_directory|source_directory|source_file)\\b"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "name": "vscode-just",
+  "displayName": "Just",
+  "description": "Language support for justfiles powered by just-lsp",
+  "version": "0.1.0",
+  "publisher": "diofeher",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/diofeher/vscode-just"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "keywords": [
+    "just",
+    "justfile",
+    "command runner",
+    "make",
+    "task runner"
+  ],
+  "activationEvents": [
+    "workspaceContains:**/justfile",
+    "workspaceContains:**/Justfile",
+    "workspaceContains:**/.justfile"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "just",
+        "aliases": [
+          "Just",
+          "justfile"
+        ],
+        "filenames": [
+          "justfile",
+          "Justfile",
+          ".justfile"
+        ],
+        "extensions": [
+          ".just"
+        ],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./icons/just-light.png",
+          "dark": "./icons/just-dark.png"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "just",
+        "scopeName": "source.just",
+        "path": "./syntaxes/just.tmLanguage.json"
+      }
+    ],
+    "configuration": {
+      "title": "Just",
+      "properties": {
+        "vscode-just.lsp.path": {
+          "type": "string",
+          "default": "just-lsp",
+          "description": "Path to the just-lsp binary"
+        },
+        "vscode-just.lsp.formatting.indentation": {
+          "type": "string",
+          "default": null,
+          "description": "Custom indentation string for formatting (e.g. \"\\t\" or \"  \")"
+        },
+        "vscode-just.lsp.rules": {
+          "type": "object",
+          "default": {},
+          "description": "Per-diagnostic-rule severity overrides. Keys are rule names, values are: error, warning, information, hint, or off",
+          "additionalProperties": {
+            "type": "string",
+            "enum": [
+              "error",
+              "warning",
+              "information",
+              "info",
+              "hint",
+              "off"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.75.0",
+    "typescript": "^5.3.0",
+    "@vscode/vsce": "^2.22.0"
+  }
+}
