@@ -29,6 +29,12 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "commands": [
+      {
+        "command": "vscode-just.runRecipe",
+        "title": "Just: Run Recipe"
+      }
+    ],
     "languages": [
       {
         "id": "just",

@@ -227,6 +227,26 @@ export async function activate(
     synchronize: {
       fileEvents: vscode.workspace.createFileSystemWatcher("**/justfile"),
     },
+    middleware: {
+      provideCodeLenses: async (document, token, next) => {
+        const lenses = await next(document, token);
+        if (!lenses) return lenses;
+        for (const lens of lenses) {
+          if (lens.command && lens.command.title === "Run") {
+            const line = document.lineAt(lens.range.start.line).text;
+            const match = line.match(/^@?([a-zA-Z_][a-zA-Z0-9_-]*)/);
+            if (match) {
+              lens.command = {
+                title: "Run",
+                command: "vscode-just.runRecipeByName",
+                arguments: [match[1], path.dirname(document.uri.fsPath)],
+              };
+            }
+          }
+        }
+        return lenses;
+      },
+    },
   };
 
   client = new LanguageClient(
@@ -236,7 +256,60 @@ export async function activate(
     clientOptions
   );
 
+  context.subscriptions.push(
+    vscode.commands.registerCommand("vscode-just.runRecipe", runRecipeCommand),
+    vscode.commands.registerCommand("vscode-just.runRecipeByName", runRecipeByName)
+  );
+
   await client.start();
+}
+
+function parseRecipeNames(document: vscode.TextDocument): string[] {
+  const recipes: string[] = [];
+  for (let i = 0; i < document.lineCount; i++) {
+    const line = document.lineAt(i).text;
+    const match = line.match(/^@?([a-zA-Z_][a-zA-Z0-9_-]*)[^:]*:(?!=)/);
+    if (match) {
+      recipes.push(match[1]);
+    }
+  }
+  return recipes;
+}
+
+async function runRecipeCommand(): Promise<void> {
+  const editor = vscode.window.activeTextEditor;
+  if (!editor || editor.document.languageId !== "just") {
+    vscode.window.showErrorMessage("Open a justfile first.");
+    return;
+  }
+
+  const recipes = parseRecipeNames(editor.document);
+  if (recipes.length === 0) {
+    vscode.window.showErrorMessage("No recipes found in justfile.");
+    return;
+  }
+
+  const selected = await vscode.window.showQuickPick(recipes, {
+    placeHolder: "Select a recipe to run",
+  });
+  if (!selected) return;
+
+  const justfileDir = path.dirname(editor.document.uri.fsPath);
+  const terminal = vscode.window.createTerminal({
+    name: `Just: ${selected}`,
+    cwd: justfileDir,
+  });
+  terminal.show();
+  terminal.sendText(`just ${selected}`);
+}
+
+function runRecipeByName(recipeName: string, cwd: string): void {
+  const terminal = vscode.window.createTerminal({
+    name: `Just: ${recipeName}`,
+    cwd,
+  });
+  terminal.show();
+  terminal.sendText(`just ${recipeName}`);
 }
 
 export async function deactivate(): Promise<void> {
