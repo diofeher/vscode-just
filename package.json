@@ -2,7 +2,7 @@
   "name": "just-language",
   "displayName": "Just Language",
   "description": "Language support for justfiles powered by just-lsp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "diofeher",
   "license": "MIT",
   "repository": {
