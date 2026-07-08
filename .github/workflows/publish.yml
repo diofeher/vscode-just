@@ -3,6 +3,7 @@ name: Publish Extension
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 jobs:
   publish:
@@ -18,4 +19,4 @@ jobs:
 
       - run: npx @vscode/vsce publish
         env:
-          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+          VSCE_PAT: ${{ secrets.VSCE_TOKEN }}
