@@ -13,20 +13,6 @@ VS Code extension for [justfiles](https://github.com/casey/just), powered by [ju
 - Code actions (run recipes from editor)
 - Formatting
 
-## Requirements
-
-Install [just-lsp](https://github.com/terror/just-lsp):
-
-```sh
-cargo install just-lsp
-```
-
-or
-
-```sh
-brew install terror/tap/just-lsp
-```
-
 ## Settings
 
 | Setting | Description | Default |
